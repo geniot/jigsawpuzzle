@@ -78,10 +78,3 @@ var (
 
 	BGR_COLOR = [4]uint8{0, 0, 0, 255} //black
 )
-
-func If[T any](cond bool, vTrue, vFalse T) T {
-	if cond {
-		return vTrue
-	}
-	return vFalse
-}

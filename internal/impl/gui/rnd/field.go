@@ -28,7 +28,13 @@ func NewField(scn *Scene) *Field {
 		tls[i] = i
 		rtn[i] = rand.Intn(4)
 	}
-	rand.Shuffle(len(tls), func(i, j int) { tls[i], tls[j] = tls[j], tls[i] })
+
+	for i := 0; i < 1000; i++ {
+		rand.Shuffle(len(tls), func(i, j int) { tls[i], tls[j] = tls[j], tls[i] })
+		if IsShufflePerfect(tls[:], CELLS_HORIZONTAL) {
+			break
+		}
+	}
 
 	surface, _ := img.LoadRW(resources.GetResource("image2.png"), true)
 	defer surface.Free()
