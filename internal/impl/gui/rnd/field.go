@@ -8,6 +8,7 @@ import (
 	"github.com/veandco/go-sdl2/sdl"
 	"math"
 	"math/rand"
+	"strconv"
 	"time"
 )
 
@@ -21,6 +22,12 @@ type Field struct {
 }
 
 func NewField(scn *Scene) *Field {
+	fld := &Field{}
+	fld.Reset()
+	return fld
+}
+
+func (field *Field) Reset() {
 	rand.Seed(time.Now().UnixNano())
 	tls := [CELLS_VERTICAL * CELLS_HORIZONTAL]int{}
 	rtn := [CELLS_VERTICAL * CELLS_HORIZONTAL]int{}
@@ -36,12 +43,15 @@ func NewField(scn *Scene) *Field {
 		}
 	}
 
-	surface, _ := img.LoadRW(resources.GetResource("image2.png"), true)
+	randomImageIndex := strconv.FormatInt(int64(rand.Intn(3)+1), 10)
+	surface, _ := img.LoadRW(resources.GetResource("image"+randomImageIndex+".png"), true)
 	defer surface.Free()
-	txt, _ := ctx.RendererIns.CreateTextureFromSurface(surface)
-	cW := surface.W / CELLS_HORIZONTAL
-	cH := surface.H / CELLS_VERTICAL
-	return &Field{cW, cH, tls[:], rtn[:], txt, scn}
+
+	field.tiles = tls[:]
+	field.rotations = rtn[:]
+	field.background, _ = ctx.RendererIns.CreateTextureFromSurface(surface)
+	field.cellWidth = surface.W / CELLS_HORIZONTAL
+	field.cellHeight = surface.H / CELLS_VERTICAL
 }
 
 func (field Field) Render() {

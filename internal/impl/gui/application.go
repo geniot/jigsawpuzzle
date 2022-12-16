@@ -19,6 +19,7 @@ func NewApplication() *ApplicationImpl {
 
 func (app *ApplicationImpl) Start() {
 	ctx.DeviceIns = dev.NewDevice()
+	ctx.FontIns, _ = ttf.OpenFontRW(resources.GetResource(glb.FONT_FILE_NAME), 1, glb.FONT_SIZE)
 	ctx.ConfigIns = NewConfig()
 	ctx.WindowIns = NewWindow()
 
@@ -28,8 +29,6 @@ func (app *ApplicationImpl) Start() {
 	ctx.RenderLoopIns = loop.NewRenderLoop()
 
 	ctx.SceneIns = rnd.NewScene()
-
-	ctx.FontIns, _ = ttf.OpenFontRW(resources.GetResource(glb.FONT_FILE_NAME), 1, glb.FONT_SIZE)
 
 	ctx.LoopIns.Start()
 

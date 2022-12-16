@@ -2,14 +2,16 @@ package rnd
 
 import (
 	"container/list"
-	"github.com/geniot/jigsawpuzzle/internal/api"
+	"github.com/geniot/jigsawpuzzle/internal/ctx"
+	"github.com/geniot/jigsawpuzzle/internal/glb"
 )
 
 type Scene struct {
-	renderables *list.List
-	field       *Field
-	frame       *Frame
-	menu        *Menu
+	renderables        *list.List
+	field              *Field
+	frame              *Frame
+	menu               *Menu
+	processedTimeStamp int64
 }
 
 func NewScene() *Scene {
@@ -33,15 +35,27 @@ func NewScene() *Scene {
 }
 
 func (scene *Scene) Render() {
-	for e := scene.renderables.Front(); e != nil; e = e.Next() {
-		e.Value.(api.IRenderable).Render()
+	scene.field.Render()
+	if !scene.menu.isVisible {
+		scene.frame.Render()
 	}
+	scene.menu.Render()
 }
 
 func (scene *Scene) Step(n uint64) {
-	if !scene.menu.isVisible {
+	if p, ok := ctx.PressedKeysCodesSetIns[glb.GCW_BUTTON_MENU]; ok && p != scene.processedTimeStamp {
+		scene.processedTimeStamp = p
+		scene.menu.isVisible = !scene.menu.isVisible
+	}
+	if scene.menu.isVisible {
+		scene.menu.Step(n)
+	} else {
 		scene.field.Step(n)
 		scene.frame.Step(n)
 	}
-	scene.menu.Step(n)
+}
+
+func (scene *Scene) NewGame() {
+	scene.menu.isVisible = false
+	scene.field.Reset()
 }

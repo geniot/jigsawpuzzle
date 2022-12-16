@@ -15,19 +15,14 @@ func drawThickRect(x int32, y int32, thickness int32) {
 
 }
 
-func getTextWidth(text string) int32 {
-	width, _, _ := ctx.FontIns.SizeUTF8(text)
-	return int32(width)
-}
-
-func drawText(txt string, x int32, y int32, color sdl.Color) int32 {
+func drawText(txt string, x int32, y int32, color sdl.Color) (int32, int32) {
 	textSurface, _ := ctx.FontIns.RenderUTF8Blended(txt, color)
 	defer textSurface.Free()
 	textTexture, _ := ctx.RendererIns.CreateTextureFromSurface(textSurface)
 	ctx.RendererIns.Copy(textTexture, nil,
 		&sdl.Rect{X: x, Y: y, W: textSurface.W, H: textSurface.H})
 	defer textTexture.Destroy()
-	return textSurface.W
+	return textSurface.W, textSurface.H
 }
 
 func loadTexture(fileName string) *sdl.Texture {
