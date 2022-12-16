@@ -22,7 +22,12 @@ func NewFrame(scn *Scene) *Frame {
 }
 
 func (frame Frame) Render() {
-	ctx.RendererIns.SetDrawColor(0, 0, 0, 150)
+	if _, ok := ctx.PressedKeysCodesSetIns[glb.GCW_BUTTON_A]; ok {
+		ctx.RendererIns.SetDrawColor(255, 0, 0, 150)
+	} else {
+		ctx.RendererIns.SetDrawColor(0, 0, 0, 150)
+	}
+
 	x := frame.cellX * glb.CELL_WIDTH
 	y := frame.cellY * glb.CELL_HEIGHT
 	drawThickRect(x, y, 3)
@@ -31,27 +36,27 @@ func (frame Frame) Render() {
 func (frame *Frame) Step(n uint64) {
 	if p, ok := ctx.PressedKeysCodesSetIns[glb.GCW_BUTTON_RIGHT]; ok && p != frame.processedRight {
 		frame.processedRight = p
-		frame.cellX += 1
-		if frame.cellX >= glb.CELLS_HORIZONTAL {
-			frame.cellX = glb.CELLS_HORIZONTAL - 1
+		if frame.cellX < glb.CELLS_HORIZONTAL-1 {
+			frame.scene.field.switchTiles(frame.cellX, frame.cellY, frame.cellX+1, frame.cellY)
+			frame.cellX += 1
 		}
 	} else if p, ok = ctx.PressedKeysCodesSetIns[glb.GCW_BUTTON_LEFT]; ok && p != frame.processedLeft {
 		frame.processedLeft = p
-		frame.cellX -= 1
-		if frame.cellX <= 0 {
-			frame.cellX = 0
+		if frame.cellX > 0 {
+			frame.scene.field.switchTiles(frame.cellX, frame.cellY, frame.cellX-1, frame.cellY)
+			frame.cellX -= 1
 		}
 	} else if p, ok = ctx.PressedKeysCodesSetIns[glb.GCW_BUTTON_UP]; ok && p != frame.processedUp {
 		frame.processedUp = p
-		frame.cellY -= 1
-		if frame.cellY <= 0 {
-			frame.cellY = 0
+		if frame.cellY > 0 {
+			frame.scene.field.switchTiles(frame.cellX, frame.cellY, frame.cellX, frame.cellY-1)
+			frame.cellY -= 1
 		}
 	} else if p, ok = ctx.PressedKeysCodesSetIns[glb.GCW_BUTTON_DOWN]; ok && p != frame.processedDown {
 		frame.processedDown = p
-		frame.cellY += 1
-		if frame.cellY >= glb.CELLS_VERTICAL {
-			frame.cellY = glb.CELLS_VERTICAL - 1
+		if frame.cellY < glb.CELLS_VERTICAL-1 {
+			frame.scene.field.switchTiles(frame.cellX, frame.cellY, frame.cellX, frame.cellY+1)
+			frame.cellY += 1
 		}
 	}
 }

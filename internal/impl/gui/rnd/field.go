@@ -59,3 +59,18 @@ func (field Field) Render() {
 func (field *Field) Step(n uint64) {
 
 }
+
+func (field *Field) switchTiles(x1 int32, y1 int32, x2 int32, y2 int32) {
+	if _, ok := ctx.PressedKeysCodesSetIns[GCW_BUTTON_A]; ok {
+		index1 := y1*CELLS_HORIZONTAL + x1
+		index2 := y2*CELLS_HORIZONTAL + x2
+
+		tmpTile := field.tiles[index1]
+		field.tiles[index1] = field.tiles[index2]
+		field.tiles[index2] = tmpTile
+
+		tmpRotation := field.rotations[index1]
+		field.rotations[index1] = field.rotations[index2]
+		field.rotations[index2] = tmpRotation
+	}
+}

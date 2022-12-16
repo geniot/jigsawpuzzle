@@ -7,6 +7,8 @@ import (
 
 type Scene struct {
 	renderables *list.List
+	field       *Field
+	frame       *Frame
 }
 
 func NewScene() *Scene {
@@ -15,8 +17,12 @@ func NewScene() *Scene {
 
 	scn.renderables = list.New()
 
-	scn.renderables.PushBack(NewField(scn))
-	scn.renderables.PushBack(NewFrame(scn))
+	scn.field = NewField(scn)
+	scn.frame = NewFrame(scn)
+
+	scn.renderables.PushBack(scn.field)
+	scn.renderables.PushBack(scn.frame)
+
 	//scn.renderables.PushBack(NewDebugGrid())
 	//scn.renderables.PushBack(NewFpsCounter())
 
