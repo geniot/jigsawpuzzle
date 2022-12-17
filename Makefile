@@ -8,6 +8,13 @@ clean:
 build:
 	go build -o bin/${PROGRAM_NAME} github.com/geniot/${PROGRAM_NAME}/cmd/${PROGRAM_NAME}
 
+mips-static:
+	CGO_ENABLED=1 \
+	GOMIPS=softfloat \
+	GOOS=linux \
+	GOARCH=mipsle \
+	go build -tags static -ldflags "-s -w" -o bin/${PROGRAM_NAME}.gcw github.com/geniot/${PROGRAM_NAME}/cmd/${PROGRAM_NAME}
+
 mips:
 	CC='/opt/gcw0-toolchain/usr/bin/mipsel-gcw0-linux-uclibc-gcc' \
 	CGO_CFLAGS='-I/opt/gcw0-toolchain/usr/mipsel-gcw0-linux-uclibc/sysroot/usr/include -I/opt/gcw0-toolchain/usr/mipsel-gcw0-linux-uclibc/sysroot/usr/include/libpng16 -D_REENTRANT' \
