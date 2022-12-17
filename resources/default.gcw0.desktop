@@ -1,9 +1,9 @@
 [Desktop Entry]
-Name=Digger
-Comment=Run and collect
-Exec=digger.gcw
+Name=Jigsaw
+Comment=Get the big picture
+Exec=jigsawpuzzle.gcw
 Terminal=false
 Type=Application
 StartupNotify=true
-Icon=digger
+Icon=jigsawpuzzle
 Categories=games;
