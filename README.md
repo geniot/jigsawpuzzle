@@ -1,5 +1,5 @@
-# jigsawpuzzle
-Jigsaw Puzzle game implemented in Go and SDL2
+# About
+Puzzle game implemented in Go and SDL2. 
 
 ![Jigsaw Puzzle](screenshots/main.png)
 
