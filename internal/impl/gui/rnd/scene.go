@@ -36,7 +36,7 @@ func NewScene() *Scene {
 
 func (scene *Scene) Render() {
 	scene.field.Render()
-	if !scene.menu.isVisible {
+	if !scene.menu.isVisible && !scene.field.isPuzzleComplete {
 		scene.frame.Render()
 	}
 	scene.menu.Render()
@@ -50,8 +50,9 @@ func (scene *Scene) Step(n uint64) {
 	if scene.menu.isVisible {
 		scene.menu.Step(n)
 	} else {
-		scene.field.Step(n)
-		scene.frame.Step(n)
+		if !scene.field.isPuzzleComplete {
+			scene.frame.Step(n)
+		}
 	}
 }
 

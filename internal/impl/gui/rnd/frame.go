@@ -59,4 +59,5 @@ func (frame *Frame) Step(n uint64) {
 			frame.cellY += 1
 		}
 	}
+	frame.scene.field.checkComplete()
 }

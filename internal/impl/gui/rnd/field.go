@@ -13,12 +13,13 @@ import (
 )
 
 type Field struct {
-	cellWidth  int32
-	cellHeight int32
-	tiles      []int
-	rotations  []int
-	background *sdl.Texture
-	scene      *Scene
+	cellWidth        int32
+	cellHeight       int32
+	tiles            []int
+	rotations        []int
+	background       *sdl.Texture
+	isPuzzleComplete bool
+	scene            *Scene
 }
 
 func NewField(scn *Scene) *Field {
@@ -52,9 +53,10 @@ func (field *Field) Reset() {
 	field.background, _ = ctx.RendererIns.CreateTextureFromSurface(surface)
 	field.cellWidth = surface.W / CELLS_HORIZONTAL
 	field.cellHeight = surface.H / CELLS_VERTICAL
+	field.isPuzzleComplete = false
 }
 
-func (field Field) Render() {
+func (field *Field) Render() {
 	for i := 0; i < len(field.tiles); i++ {
 		tile := field.tiles[i]
 		angle := float64(0) //float64(field.rotations[i] * 90)
@@ -72,10 +74,6 @@ func (field Field) Render() {
 	}
 }
 
-func (field *Field) Step(n uint64) {
-
-}
-
 func (field *Field) switchTiles(x1 int32, y1 int32, x2 int32, y2 int32) {
 	if _, ok := ctx.PressedKeysCodesSetIns[GCW_BUTTON_A]; ok {
 		index1 := y1*CELLS_HORIZONTAL + x1
@@ -89,4 +87,14 @@ func (field *Field) switchTiles(x1 int32, y1 int32, x2 int32, y2 int32) {
 		field.rotations[index1] = field.rotations[index2]
 		field.rotations[index2] = tmpRotation
 	}
+}
+
+func (field *Field) checkComplete() {
+	for i := 0; i < len(field.tiles); i++ {
+		if field.tiles[i] != i {
+			field.isPuzzleComplete = false
+			return
+		}
+	}
+	field.isPuzzleComplete = true
 }
