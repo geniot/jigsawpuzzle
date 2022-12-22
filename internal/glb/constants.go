@@ -7,7 +7,7 @@ import (
 
 const (
 	APP_NAME       = "Jigsaw Puzzle"
-	APP_VERSION    = "0.1"
+	APP_VERSION    = "0.2"
 	CONF_FILE_NAME = ".jigsawpuzzle.properties"
 	FONT_FILE_NAME = "OpenSans-Regular.ttf"
 	ICON_FILE_NAME = "jigsawpuzzle.png"
